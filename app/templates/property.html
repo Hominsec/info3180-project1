@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 
-{% block css %}{% endblock %}
-
 {% block main %}
+<h1 class="page-header">INFO3180 Project 1</h1>
 {% include 'flash_messages.html' %}
-<div class="p-5 mb-4 bg-light rounded-3 border">
-  <div class="container-fluid py-5">
-    
-    <h1 class="display-5 fw-bold">Hello, world!</h1>
+<div class="image-container">
+    {% for property in properties %}
+    <div>
+        <img src="{{ url_for('get_image', filename=property.filename) }}" alt="RAND" width="300" height="250">
+        <p>{{property.title}}</p>
+        <p>{{property.location}}</p>
+        <p>{{property.price}}</p>
+        <button type="submit" name="submit" class="btn btn-primary">View Property</button>
+    </div>
 
-    <p>This is a simple starter template for a Flask Application</p>
-  </div>
+    {% endfor %}
 </div>
 {% endblock %}
-
-{% block js %}{% endblock %}

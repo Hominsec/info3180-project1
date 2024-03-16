@@ -22,18 +22,40 @@ from app.models import Properties##THIS##
 ###
 lst=[]
 def get_uploaded_images():
-    rootdir = os.getcwd()#Gets current working dir
-    #print(rootdir)
+    rootdir = os.getcwd()
     for subdir, dirs, files in os.walk(rootdir + '/uploads'):
         for file in files:
-            #name=os.path.join(subdir, file)
             name=os.path.join(file)
             lst.append(name)
-            #print(os.path.join(subdir, file))
 
 @app.route('/uploads/<filename>')
 def get_image(filename):
     return(send_from_directory(os.path.join(os.getcwd(),app.config['UPLOAD_FOLDER']), filename))
+"""
+@app.route('/uploads/<filename>')
+def get_info(name):
+    propertyinfo=db.session.execute(db.select(Properties).filter_by(filename=name)).scalar()
+    title=propertyinfo.title
+    location=propertyinfo.location
+    price=propertyinfo.price
+    var_lst=[title,location,price]
+    return render_template('property.html', var_lst=var_lst)
+
+"""
+
+
+"""@app.route('/property')
+def property():
+    get_uploaded_images()
+    print(lst)
+    images = list(set(lst))#ALL THE IMAGE NAMES
+    #return render_template('property.html')
+    return render_template('property.html',images=images)
+"""
+@app.route('/property')
+def property():
+    properties=Properties.query.all()
+    return render_template('property.html',properties=properties)
 
 @app.route('/properties/create',methods=['GET', 'POST'])
 def new_property():
@@ -62,10 +84,10 @@ def new_property():
             return redirect(url_for('property'))
     return render_template('new_property.html', form=form)
 
-@app.route('/properties')
-def property():
-    """Render website's property page."""
-    return render_template('property.html')
+#@app.route('/properties')
+#def property():
+#    """Render website's property page."""
+#    return render_template('property.html')
 
 @app.route('/properties/<propertyid>')
 def get_property():
