@@ -5,13 +5,72 @@ Werkzeug Documentation:  https://werkzeug.palletsprojects.com/
 This file contains the routes for your application.
 """
 
-from app import app
-from flask import render_template, request, redirect, url_for
+import os
+from app import app, db
+from flask import render_template, request, redirect, url_for, flash, session, abort, send_from_directory
+from app.forms import PropertyForm
+from werkzeug.utils import secure_filename
+from app.models import Properties##THIS##
+
+
+#from app.models import UserProfile##THIS##
+
 
 
 ###
 # Routing for your application.
 ###
+lst=[]
+def get_uploaded_images():
+    rootdir = os.getcwd()#Gets current working dir
+    #print(rootdir)
+    for subdir, dirs, files in os.walk(rootdir + '/uploads'):
+        for file in files:
+            #name=os.path.join(subdir, file)
+            name=os.path.join(file)
+            lst.append(name)
+            #print(os.path.join(subdir, file))
+
+@app.route('/uploads/<filename>')
+def get_image(filename):
+    return(send_from_directory(os.path.join(os.getcwd(),app.config['UPLOAD_FOLDER']), filename))
+
+@app.route('/properties/create',methods=['GET', 'POST'])
+def new_property():
+    form=PropertyForm()
+    """Render website's new property page."""
+    if request.method == 'POST':
+        photo=form.photo.data
+        if form.validate_on_submit():
+            photo=form.photo.data
+            filename=secure_filename(photo.filename)
+            photo.save(os.path.join( app.config['UPLOAD_FOLDER'], filename ))
+            new_property=Properties(
+                title=form.title.data,
+                bedrooms=form.bedrooms.data,
+                bathrooms=form.bathrooms.data,
+                location=form.location.data,
+                price=form.price.data,
+                type=form.type.data,
+                description=form.description.data,
+                filename=secure_filename(photo.filename)
+            )
+            db.session.add(new_property)
+            db.session.commit()
+
+            flash("Property Added Successfully!")
+            return redirect(url_for('property'))
+    return render_template('new_property.html', form=form)
+
+@app.route('/properties')
+def property():
+    """Render website's property page."""
+    return render_template('property.html')
+
+@app.route('/properties/<propertyid>')
+def get_property():
+    #NOT SURE YET
+    return render_template('.html')
 
 @app.route('/')
 def home():

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h1 class="page-header">Add New Property</h1>
+
+{% include 'flash_messages.html' %}
+
+{# Add the appropriate method and enctype attributes to the form tag to allow for file uploads #}
+<form action="/properties/create" method="post" enctype="multipart/form-data">
+
+  {# Add the file upload field as you learnt for Flask-WTF #}
+  {{ form.csrf_token }}
+  <div class="form-floating">
+    <p>Property Title</p>
+    {{ form.title(class='form-control', placeholder="Property Title") }}
+    <!--{{ form.title.label() }}-->
+  </div>
+
+  <div class="form-floating">
+    <p>Description</p>
+    {{ form.description(class='form-control', placeholder="Description") }}
+  </div>
+
+  <div class="form-floating flex-container" id="">
+    <div class="flex-item top-items" id="rooms">
+      <p>No. of Rooms</p>
+      {{ form.bedrooms(class='form-control', placeholder="3") }}
+    </div>
+    <div class="flex-item top-items">
+      <p>No. of BathRooms</p>
+      {{ form.bathrooms(class='form-control', placeholder="2") }}
+    </div>
+    <div class="flex-item bottom-items">
+      <p>Price</p>
+      {{ form.price(class='form-control', placeholder="15,000,000") }}
+    </div>
+    <div class="flex-item bottom-items">
+      <p>Property Type</p>
+      {{ form.type(class='form-control') }}
+    </div>
+  </div>
+  <div class="form-floating">
+    <p>Location</p>
+    {{ form.location(class='form-control', placeholder="10 Waterloo Rd") }}
+  </div>
+
+ <div class="form-group mb-3">
+ {{ form.photo.label(class="form-label") }}
+ {{ form.photo(class="form-control") }}
+ </div>
+
+  <button type="submit" name="submit" class="btn btn-primary">Upload file</button>
+</form>
+{% endblock %}
