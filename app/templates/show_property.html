@@ -2,12 +2,23 @@
 
 {% block main %}
 {% include 'flash_messages.html' %}
-<div class="image-container">
-    <div>
-        <img src="{{ url_for('get_image', filename=property.filename) }}" alt="RAND" width="300" height="250">
-        <p id="title">{{property.title}}</p>
-        <p id="location"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>{{property.location}}</p>
-        <p id="Price">${{property.price}}</p>   
+<div class="individual">
+    <div class="flex">
+        <img src="{{ url_for('get_image', filename=property.filename) }}" alt="RAND" width="400" height="400"> 
+    </div>
+    <div class="flex">
+        <p id="ititle">{{property.title}}</p>
+        <div class="float">
+            <p id="iprice">${{property.price}}</p> 
+            <p id="itype">{{property.type}}</p> 
+        </div>        
+        <p id="idescription">{{property.description}}</p> 
+        <div class="float2">
+            <p id="ibedrooms"><span class="icon"><i class="fas fa-couch"></i></span>{{property.bedrooms}} Bedrooms</p> 
+            <p id="ibathrooms"><span class="icon"><i class="fas fa-shower"></i></span>{{property.bathrooms}} Bathrooms</p> 
+        </div>
+        <p id="ilocation"><span class="icon"><i class="fas fa-map-marker-alt"></i></span>{{property.location}}</p> 
+        <a href="" class="btn btn-primary" id="bttn">Email Realtor</a>   
     </div>
 </div>
 {% endblock %}

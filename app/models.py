@@ -11,7 +11,7 @@ class Properties(db.Model):
 
     id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     title = db.Column(db.String(80))
-    description = db.Column(db.String(80))
+    description = db.Column(db.String(1000))
     bedrooms = db.Column(db.String(80))
     bathrooms = db.Column(db.String(80))
     location=db.Column(db.String(200))
